@@ -1,13 +1,9 @@
 import cv2
-#from src.hand_tracker import HandTracker
-from src.multi_hand_tracker import *
-#from src.multi_hand_tracker import is_right_hand
-import numpy as np
+from src.hand_tracker import HandTracker
 
 WINDOW = "Hand Tracking"
 PALM_MODEL_PATH = "models/palm_detection_without_custom_op.tflite"
-#LANDMARK_MODEL_PATH = "models/hand_landmark.tflite"
-LANDMARK_MODEL_PATH = "models/hand_landmark_3d.tflite"
+LANDMARK_MODEL_PATH = "models/hand_landmark.tflite"
 ANCHORS_PATH = "models/anchors.csv"
 
 POINT_COLOR = (0, 255, 0)
@@ -43,49 +39,25 @@ connections = [
     (0, 5), (5, 9), (9, 13), (13, 17), (0, 17)
 ]
 
-angle_pos = [
-    1, 2, 3,
-    5, 6, 7,
-    9, 10, 11,
-    13, 14, 15,
-    17, 18, 19
-]
-
-angle = {'left':{}, 'right':{}}
-
-detector = MultiHandTracker3D(
+detector = HandTracker(
     PALM_MODEL_PATH,
     LANDMARK_MODEL_PATH,
-    ANCHORS_PATH
+    ANCHORS_PATH,
+    box_shift=0.2,
+    box_enlarge=1.3
 )
 
 while hasFrame:
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    hands, _ = detector(image)
-    if hands is not None:
-        for hand in hands:
-            if hand is None:
-                continue
-            #print(hand)
-            hand = np.array(hand)
-            points = hand
-            for point in points:
-                x, y, z = point[:]
-                cv2.circle(frame, (int(x), int(y)), THICKNESS * 2, POINT_COLOR, THICKNESS)
-            for idx, connection in enumerate(connections):
-                x0, y0, z0 = points[connection[0]]
-                x1, y1, z1 = points[connection[1]]
-                cv2.line(frame, (int(x0), int(y0)), (int(x1), int(y1)), CONNECTION_COLOR, THICKNESS)
-            side = is_right_hand(points)
-            if side == None:
-                continue
-            for pos in angle_pos:
-                if side == True:
-                    side = 'right'
-                else:
-                    side = 'left'
-                angle[side].update({pos : calc_angle(pos, connection, points)})
-            print(angle[side][6])
+    points, _ = detector(image)
+    if points is not None:
+        for point in points:
+            x, y = point
+            cv2.circle(frame, (int(x), int(y)), THICKNESS * 2, POINT_COLOR, THICKNESS)
+        for connection in connections:
+            x0, y0 = points[connection[0]]
+            x1, y1 = points[connection[1]]
+            cv2.line(frame, (int(x0), int(y0)), (int(x1), int(y1)), CONNECTION_COLOR, THICKNESS)
     cv2.imshow(WINDOW, frame)
     hasFrame, frame = capture.read()
     key = cv2.waitKey(1)

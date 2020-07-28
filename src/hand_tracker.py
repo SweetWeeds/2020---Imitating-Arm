@@ -49,7 +49,6 @@ class HandTracker():
 
         self.in_idx_joint = self.interp_joint.get_input_details()[0]['index']
         self.out_idx_joint = self.interp_joint.get_output_details()[0]['index']
-        print("joint:{}".format(self.out_idx_joint))
 
         # 90° rotation matrix used to create the alignment trianlge
         self.R90 = np.r_[[[0,1],[-1,0]]]
@@ -109,7 +108,6 @@ class HandTracker():
         self.interp_joint.invoke()
 
         joints = self.interp_joint.get_tensor(self.out_idx_joint)
-        print("joints:{}".format(joints))
         return joints.reshape(-1,2)
 
     def detect_hand(self, img_norm):
