@@ -3,12 +3,12 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 
 void MyMotor::SendByte(u8 data) {
-    Serial.write(data);
+    rs485.Write(data);
 } // UART Transmit Function
 
 u8 MyMotor::GetByte(u16 timeout) {
     u8 buf;
-    Serial.readBytes(&buf, 1);
+    rs485.Read(&buf);
     return buf;
 } // UART Receive Function
 
@@ -847,4 +847,8 @@ u32 MyMotor::Standard_PrecisionPosRead_CMD(u8 SamId) {
         ResponseData |= GetByte(TIMEOUT);
     }
     return ResponseData;
+}
+
+void MyMotor::Close() {
+    this->rs485.Close();
 }

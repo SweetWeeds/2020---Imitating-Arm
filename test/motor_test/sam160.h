@@ -1,6 +1,6 @@
 #define TIMEOUT 0
 #define HEADER 0xff
-#include <HardwareSerial.h>
+#include "rs485.h"
 /*--------------------data definition ------------------------------------------------------------------------------------------------*/
 typedef signed long s32; // 4 byte
 typedef signed short s16; // 2 byte
@@ -13,12 +13,10 @@ typedef unsigned char u8; // 1 byte
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 class MyMotor {
     private:
-        HardwareSerial &Serial;
+        RS485 rs485;
         void SendByte(u8 data); // UART Transmit Function
         u8 GetByte(u16 timeout); // UART Receive Function
     public:
-        MyMotor(HardwareSerial Serial) : Serial(Serial) {
-        }
         /*--------------------Packet formation function -----------------------------------------------------------*/
         void Quick_Ctrl_CMD(u8 Data1, u8 Data2);
         void Quick_Set_Expand_CMD(u8 Data1, u8 Data2, u8 Data3, u8 Data4);
@@ -85,4 +83,5 @@ class MyMotor {
         u16 Standard_PosControl_CMD(u8 SamId, u16 Position);
         u32 Standard_PrecisionPosControl_CMD(u8 SamId, u32 PrecisionPosition);
         u32 Standard_PrecisionPosRead_CMD(u8 SamId);
+        void Close();
 };
