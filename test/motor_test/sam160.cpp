@@ -91,6 +91,13 @@ u16 MyMotor::Quick_PosControl_CMD(u8 SamId, u8 Torq, u8 TargetPos) {
 
     return ResponseData;
 }
+
+u16 MyMotor::MyQuick_PosControl_CMD(u8 SamId, u8 Torq, u8 TargetPos) {
+    this->Quick_PosControl_CMD(SamId, Torq, TargetPos);
+    this->Quick_PosControl_CMD(SamId, Torq, TargetPos);
+    return this->Quick_PosControl_CMD(SamId, Torq, TargetPos);
+}
+
 /******************************************************************************/
 /* Send Quick read status Command Packet(4bytes) to SAM */
 /* Input : SamId, *Torq, *CurrentPos */

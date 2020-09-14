@@ -21,7 +21,7 @@ typedef unsigned char u8; // 1 byte
 class RS485 {
     private:
         struct termios tty;
-        int serial_port = open("/dev/ttyUSB0", O_RDWR);
+        int serial_port = open("/dev/ttyUSB1", O_RDWR);
         char read_buf[1];
         void init();
     public:

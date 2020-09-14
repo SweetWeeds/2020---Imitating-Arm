@@ -1,5 +1,5 @@
 #define TIMEOUT 0
-#define HEADER 0xff
+#define HEADER 0xFF
 #include "rs485.h"
 /*--------------------data definition ------------------------------------------------------------------------------------------------*/
 typedef signed long s32; // 4 byte
@@ -24,6 +24,7 @@ class MyMotor {
         void Standard_8Byte_CMD(u8 Data1, u8 Data2, u8 Data3, u8 Data4, u8 Data5);
         /*--------------------Quick control function ----------------------------------------------------------------------------------------*/
         u16 Quick_PosControl_CMD(u8 SamId, u8 Torq, u8 TargetPos);
+        u16 MyQuick_PosControl_CMD(u8 SamId, u8 Torq, u8 TargetPos);
         u16 Quick_StatusRead_CMD(u8 SamId);
         u16 Quick_PassiveMode_CMD(u8 SamId);
         u16 Quick_WheelMode_CMD(u8 SamId, u8 Dir, u8 WheelSpeed);
