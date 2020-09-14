@@ -40,7 +40,7 @@ connections = [
     (0, 5), (5, 9), (9, 13), (13, 17), (0, 17)
 ]
 
-angle_target = [1, 6, 10]
+angle_target = [1, 2, 6, 10]
 
 detector = MultiHandTracker3D(
     PALM_MODEL_PATH,

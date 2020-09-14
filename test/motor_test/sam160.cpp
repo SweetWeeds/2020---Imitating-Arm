@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 
 void MyMotor::SendByte(u8 data) {
-    rs485.Write(data);
+    rs485.Write(data, sizeof(data));
 } // UART Transmit Function
 
 u8 MyMotor::GetByte(u16 timeout) {

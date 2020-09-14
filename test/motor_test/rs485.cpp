@@ -59,8 +59,8 @@ void RS485::init() {
   **/
 }
 
-void RS485::Write(u8 data) {
-  write(this->serial_port, &data, sizeof(u8));
+void RS485::Write(u8 data, size_t size) {
+  write(this->serial_port, &data, size);
 }
 
 void RS485::Read(u8 *read_buf) {

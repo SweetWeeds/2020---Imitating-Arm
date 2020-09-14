@@ -26,7 +26,7 @@ class RS485 {
         void init();
     public:
         RS485();
-        void Write(u8 data);
+        void Write(u8 data, size_t size);
         void Read(u8 *buf);
         void Close();
 };
