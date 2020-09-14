@@ -949,7 +949,7 @@ def is_right_hand(kp):
     
     return False
 
-def calc_angle(pos, connection, points):
+def calc_angle(pos, points):
     ba = points[pos] - points[pos - 1]
     bc = points[pos] - points[pos + 1]
     cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))

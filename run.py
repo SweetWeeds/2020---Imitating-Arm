@@ -1,9 +1,10 @@
 import cv2
-from src.hand_tracker import HandTracker
+from src.multi_hand_tracker import MultiHandTracker3D
+from src.multi_hand_tracker import calc_angle
 
 WINDOW = "Hand Tracking"
 PALM_MODEL_PATH = "models/palm_detection_without_custom_op.tflite"
-LANDMARK_MODEL_PATH = "models/hand_landmark.tflite"
+LANDMARK_MODEL_PATH = "models/hand_landmark_3d.tflite"
 ANCHORS_PATH = "models/anchors.csv"
 
 POINT_COLOR = (0, 255, 0)
@@ -39,7 +40,9 @@ connections = [
     (0, 5), (5, 9), (9, 13), (13, 17), (0, 17)
 ]
 
-detector = HandTracker(
+angle_target = [1, 6, 10]
+
+detector = MultiHandTracker3D(
     PALM_MODEL_PATH,
     LANDMARK_MODEL_PATH,
     ANCHORS_PATH,
@@ -48,16 +51,24 @@ detector = HandTracker(
 )
 
 while hasFrame:
+    angle_lst = []
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     points, _ = detector(image)
     if points is not None:
+        #for points in hands:
+        points = points[0]
         for point in points:
-            x, y = point
+            if not point.all():
+                break
+            x, y, z = point
             cv2.circle(frame, (int(x), int(y)), THICKNESS * 2, POINT_COLOR, THICKNESS)
         for connection in connections:
-            x0, y0 = points[connection[0]]
-            x1, y1 = points[connection[1]]
+            x0, y0, z0 = points[connection[0]]
+            x1, y1, z1 = points[connection[1]]
             cv2.line(frame, (int(x0), int(y0)), (int(x1), int(y1)), CONNECTION_COLOR, THICKNESS)
+        for target in angle_target:
+            angle_lst.append(calc_angle(target, points))
+    print(angle_lst)
     cv2.imshow(WINDOW, frame)
     hasFrame, frame = capture.read()
     key = cv2.waitKey(1)

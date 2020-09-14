@@ -8,6 +8,8 @@
 #include <termios.h> // Contains POSIX terminal control definitions
 #include <unistd.h> // write(), read(), close()
 
+#define BAUD_RATE B1500000
+
 /*--------------------data definition ------------------------------------------------------------------------------------------------*/
 typedef signed long s32; // 4 byte
 typedef signed short s16; // 2 byte
